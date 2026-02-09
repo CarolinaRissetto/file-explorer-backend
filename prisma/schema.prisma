@@ -1,0 +1,28 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Folder {
+  id        String   @id @default(cuid())
+  name      String
+  parentId  String?
+  createdAt DateTime @default(now())
+
+  @@index([parentId])
+}
+
+model File {
+  id        String   @id @default(cuid())
+  name      String
+  parentId  String
+  size      Int
+  order     Int
+  createdAt DateTime @default(now())
+
+  @@index([parentId])
+}

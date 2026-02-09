@@ -1,25 +1,25 @@
 import { Request, Response } from "express";
 import * as filesystemService from "../services/filesystem.service";
 
-export function getFiles(req: Request, res: Response): void {
+export async function getFiles(req: Request, res: Response): Promise<void> {
   try {
     const parentId = req.query.parentId as string | undefined;
     const all = req.query.all === "true";
     if (all) {
-      const files = filesystemService.getAllFiles();
+      const files = await filesystemService.getAllFiles();
       res.json(files);
       return;
     }
     const normalized =
       parentId === undefined || parentId === "" ? "__root__" : parentId;
-    const files = filesystemService.getFiles(normalized);
+    const files = await filesystemService.getFiles(normalized);
     res.json(files);
   } catch (e) {
     res.status(500).json({ error: (e as Error).message });
   }
 }
 
-export function createFile(req: Request, res: Response): void {
+export async function createFile(req: Request, res: Response): Promise<void> {
   try {
     const { name, parentId, size } = req.body as {
       name?: string;
@@ -39,7 +39,7 @@ export function createFile(req: Request, res: Response): void {
       res.status(400).json({ error: "size must be a non-negative number" });
       return;
     }
-    const file = filesystemService.createFile(name.trim(), parentId, numSize);
+    const file = await filesystemService.createFile(name.trim(), parentId, numSize);
     res.status(201).json(file);
   } catch (e) {
     const msg = (e as Error).message;
@@ -51,7 +51,7 @@ export function createFile(req: Request, res: Response): void {
   }
 }
 
-export function patchFile(req: Request, res: Response): void {
+export async function patchFile(req: Request, res: Response): Promise<void> {
   try {
     const id = req.params.id;
     const { name, parentId } = req.body as { name?: string; parentId?: string };
@@ -62,7 +62,7 @@ export function patchFile(req: Request, res: Response): void {
       res.status(400).json({ error: "name or parentId required" });
       return;
     }
-    const file = filesystemService.updateFile(id, patch);
+    const file = await filesystemService.updateFile(id, patch);
     res.json(file);
   } catch (e) {
     const msg = (e as Error).message;
@@ -78,7 +78,7 @@ export function patchFile(req: Request, res: Response): void {
   }
 }
 
-export function reorderFiles(req: Request, res: Response): void {
+export async function reorderFiles(req: Request, res: Response): Promise<void> {
   try {
     const { parentId, orderedIds } = req.body as {
       parentId?: string | null;
@@ -92,17 +92,17 @@ export function reorderFiles(req: Request, res: Response): void {
       res.status(400).json({ error: "orderedIds must be an array" });
       return;
     }
-    filesystemService.reorderFiles(normalizedParentId, orderedIds);
+    await filesystemService.reorderFiles(normalizedParentId, orderedIds);
     res.status(204).send();
   } catch (e) {
     res.status(500).json({ error: (e as Error).message });
   }
 }
 
-export function deleteFile(req: Request, res: Response): void {
+export async function deleteFile(req: Request, res: Response): Promise<void> {
   try {
     const id = req.params.id;
-    filesystemService.deleteFile(id);
+    await filesystemService.deleteFile(id);
     res.status(204).send();
   } catch (e) {
     res.status(500).json({ error: (e as Error).message });

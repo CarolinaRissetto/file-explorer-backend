@@ -4,6 +4,10 @@ node_modules/
 # Build
 dist/
 
+# Prisma
+prisma/*.db
+prisma/*.db-journal
+
 # Env (PORT, etc.)
 .env
 .env.local
