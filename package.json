@@ -1,0 +1,23 @@
+{
+  "name": "file-explorer-backend",
+  "version": "1.0.0",
+  "main": "dist/server.js",
+  "scripts": {
+    "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
+    "dev:watch": "nodemon --watch src --ext ts --exec \"tsc && node dist/server.js\"",
+    "build": "tsc",
+    "start": "node dist/server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.0"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/node": "^22.9.0",
+    "typescript": "^5.6.3",
+    "ts-node-dev": "^2.0.0",
+    "nodemon": "^3.1.0"
+  }
+}
