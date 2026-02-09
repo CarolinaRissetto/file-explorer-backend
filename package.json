@@ -1,5 +1,8 @@
 {
   "name": "file-explorer-backend",
+  "engines": {
+    "node": ">=18"
+  },
   "version": "1.0.0",
   "main": "dist/server.js",
   "scripts": {
@@ -7,11 +10,13 @@
     "dev:watch": "nodemon --watch src --ext ts --exec \"tsc && node dist/server.js\"",
     "build": "prisma generate && tsc",
     "start": "node dist/server.js",
+    "start:prod": "prisma migrate deploy && node dist/server.js",
     "postinstall": "prisma generate"
   },
   "dependencies": {
     "@prisma/client": "^5.22.0",
     "cors": "^2.8.5",
+    "dotenv": "^17.2.4",
     "express": "^4.21.0",
     "prisma": "^5.22.0"
   },
